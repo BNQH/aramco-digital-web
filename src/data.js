@@ -84,6 +84,17 @@ export const sites = [
 
 export const siteById = id => sites.find(s => s.id === id)
 
+// ---- Hub assignment ----
+// Every region has a transport hub. Hub sites reference themselves; every other
+// site is back-hauled to its region's hub. This powers the hub star on the map
+// and the "Hub ID / Hub coordinates" shown on the site details page.
+const regionHubId = {}
+sites.forEach(s => { if (s.isHub === 'Yes') regionHubId[s.region] = s.id })
+sites.forEach(s => { s.hubId = s.isHub === 'Yes' ? s.id : (regionHubId[s.region] || null) })
+
+// Resolve a site's serving hub (its own record when the site itself is a hub).
+export const hubForSite = site => (site && site.hubId ? siteById(site.hubId) : null)
+
 // ---- Field Engineers ----
 export const engineers = [
   { id: 'FE-07', name: 'Khalid Al-Otaibi', initials: 'KO', region: 'Central', base: 'Riyadh', coord: [24.7000, 46.6800], skills: ['RF', 'Transmission', 'Power'],     status: 'available', rating: 4.8, phone: '+966 55 111 2233', currentTicket: null },

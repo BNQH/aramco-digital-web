@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Icon, BrandLockup } from '../components/Icons.jsx'
 import { useNav } from '../nav.jsx'
+import { signIn as startSession, signInAsAdmin } from '../session.js'
 
 const features = [
   { icon: 'clipboard', title: 'Automated ticketing', text: 'PAT, corrective & preventive tickets in one workspace.' },
@@ -14,7 +15,7 @@ export default function Login() {
   const [email, setEmail] = useState('ahmad.hudis@aramcodigital.com')
   const [pwd, setPwd] = useState('demo1234')
 
-  const signIn = (e) => { e.preventDefault(); navigate('dashboard') }
+  const signIn = (e) => { e.preventDefault(); startSession(email); navigate('dashboard') }
 
   return (
     <div className="auth-wrap">
@@ -77,13 +78,16 @@ export default function Login() {
 
           <div className="divider-or">or</div>
 
-          <button type="button" className="btn btn-ghost btn-block" onClick={() => navigate('dashboard')}>
+          <button type="button" className="btn btn-ghost btn-block" onClick={() => { startSession(email); navigate('dashboard') }}>
             <Icon name="sso" size={18} /> Sign in with SSO
           </button>
 
-          <button type="button" className="btn btn-ghost btn-block" style={{ marginTop: 12 }} onClick={() => navigate('admin')}>
-            <Icon name="shield" size={18} /> Open Admin Console
+          <button type="button" className="btn btn-ghost btn-block" style={{ marginTop: 12 }} onClick={() => { signInAsAdmin(); navigate('admin') }}>
+            <Icon name="shield" size={18} /> Sign in as Administrator (demo)
           </button>
+          <p style={{ textAlign: 'center', marginTop: 8, fontSize: 12, color: 'var(--muted-2)' }}>
+            Admin account: admin@aramcodigital.com — the Administration menu appears only for admin roles.
+          </p>
 
           <p style={{ textAlign: 'center', marginTop: 26, fontSize: 13, color: 'var(--muted)' }}>
             Need help? <a className="link-green" href="#" onClick={e => e.preventDefault()}>Contact IT Support</a>

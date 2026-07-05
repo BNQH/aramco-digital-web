@@ -35,9 +35,17 @@ export default function MapView({ engineers = [], sites = [], showSites = true, 
     if (showSites) {
       sites.forEach(s => {
         const color = siteColor[s.condition] || '#1BA94C'
-        const icon = L.divIcon({ className: '', html: `<div class="site-emoji" style="border-color:${color}">🗼</div>`, iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14] })
+        const isHub = s.isHub === 'Yes'
+        // Hubs keep the tower site glyph but get a gold ring + a small star badge.
+        const cls = 'site-emoji' + (isHub ? ' site-hub' : '')
+        const badge = isHub ? '<span class="site-hub-star">★</span>' : ''
+        const icon = L.divIcon({
+          className: '',
+          html: `<div class="${cls}" style="border-color:${color}" title="${isHub ? 'Hub site' : 'Site'}">🗼${badge}</div>`,
+          iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14],
+        })
         L.marker(s.coord, { icon }).addTo(map).bindPopup(
-          `<div class="map-pop-title">${esc(s.id)} · ${esc(s.name)}</div><div class="map-pop-sub">${esc(s.city)} · ${esc(s.priority)} · ${esc(s.vendor)} · ${esc(s.condition)}</div>`
+          `<div class="map-pop-title">${esc(s.id)} · ${esc(s.name)}${isHub ? ' ★' : ''}</div><div class="map-pop-sub">${esc(s.city)} · ${esc(s.priority)} · ${esc(s.vendor)} · ${esc(s.condition)}${isHub ? ' · Hub' : ''}</div>`
         )
         bounds.push(s.coord)
       })

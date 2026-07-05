@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Icon } from './Icons.jsx'
+import DateRange from './DateRange.jsx'
 
 export const PERIODS = [
   { id: 'daily',   label: 'Daily',   sub: 'last 24h' },
@@ -10,7 +10,7 @@ export const PERIODS = [
 
 /**
  * Segmented period control (Daily / Weekly / Monthly / Custom).
- * Custom reveals two date inputs. Calls onChange({id, sub, from, to}).
+ * Custom reveals a single-frame from→to date range. Calls onChange({id, sub, from, to}).
  */
 export default function PeriodSelector({ value = 'daily', onChange }) {
   const [sel, setSel] = useState(value)
@@ -31,17 +31,14 @@ export default function PeriodSelector({ value = 'daily', onChange }) {
         ))}
       </div>
       {sel === 'custom' && (
-        <div className="toolbar" style={{ gap: 8 }}>
-          <div className="input-wrap" style={{ padding: '7px 12px' }}>
-            <Icon name="calendar" size={16} className="input-icon" />
-            <input type="date" value={from} onChange={e => { setFrom(e.target.value); onChange?.({ id: 'custom', sub: 'custom range', from: e.target.value, to }) }} style={{ width: 130 }} />
-          </div>
-          <span className="dim">to</span>
-          <div className="input-wrap" style={{ padding: '7px 12px' }}>
-            <Icon name="calendar" size={16} className="input-icon" />
-            <input type="date" value={to} onChange={e => { setTo(e.target.value); onChange?.({ id: 'custom', sub: 'custom range', from, to: e.target.value }) }} style={{ width: 130 }} />
-          </div>
-        </div>
+        <DateRange
+          from={from}
+          to={to}
+          onChange={r => {
+            setFrom(r.from); setTo(r.to)
+            onChange?.({ id: 'custom', sub: 'custom range', from: r.from, to: r.to })
+          }}
+        />
       )}
     </div>
   )

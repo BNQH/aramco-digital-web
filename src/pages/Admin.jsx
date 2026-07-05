@@ -3,6 +3,7 @@ import Topbar from '../components/Topbar.jsx'
 import ExportButton from '../components/ExportButton.jsx'
 import { Icon } from '../components/Icons.jsx'
 import { adminUsers, adminModules, rolePermissions } from '../data.js'
+import { session } from '../session.js'
 
 const accessMeta = {
   full: { label: 'Full', badge: 'badge-green' },
@@ -11,16 +12,42 @@ const accessMeta = {
 }
 const cycle = { full: 'view', view: 'none', none: 'full' }
 
+// Roles a user can hold, scoped by which side (Vendor / ISP) they belong to.
+const roleOptionsBySide = {
+  Vendor: ['NOC', 'Help Desk', 'FE'],
+  ISP: ['Head', 'Region Manager'],
+}
+
 export default function Admin() {
   const [side, setSide] = useState('All')
   const [users, setUsers] = useState(adminUsers)
   const [perms, setPerms] = useState(rolePermissions)
+  const [editingRoleId, setEditingRoleId] = useState(null)
 
   const shown = users.filter(u => side === 'All' || u.side === side)
   const toggleUser = id => setUsers(us => us.map(u => u.id === id ? { ...u, status: u.status === 'Active' ? 'Suspended' : 'Active' } : u))
   const cyclePerm = (role, mod) => setPerms(p => ({ ...p, [role]: { ...p[role], [mod]: cycle[p[role][mod]] } }))
+  const setUserRole = (id, role) => setUsers(us => us.map(u => u.id === id ? { ...u, role } : u))
 
   const roleNames = Object.keys(perms)
+
+  // Client-side guard: the Administration console is only for admin roles.
+  if (!session.isAdmin) {
+    return (
+      <>
+        <Topbar title="Administration" sub="Users, roles & role-based access control" />
+        <div className="content page">
+          <div className="card card-pad" style={{ textAlign: 'center', padding: '48px 24px' }}>
+            <div className="chip-icon chip-green" style={{ margin: '0 auto 14px' }}><Icon name="shield" size={22} /></div>
+            <h3 style={{ margin: '0 0 6px' }}>Access restricted</h3>
+            <p className="muted" style={{ margin: 0 }}>
+              Administration is available to admin roles only. You are signed in as {session.name} ({session.role}).
+            </p>
+          </div>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -54,7 +81,26 @@ export default function Admin() {
                     <div className="avatar" style={{ width: 32, height: 32, fontSize: 12 }}>{u.name.split(' ').map(x => x[0]).slice(0, 2).join('')}</div>
                     <div><div className="td-strong">{u.name}</div><div className="td-mono">{u.id}</div></div>
                   </div></td>
-                  <td><span className="badge badge-blue">{u.role}</span></td>
+                  <td>
+                    {editingRoleId === u.id ? (
+                      <select
+                        className="role-select"
+                        value={u.role}
+                        autoFocus
+                        onChange={e => { setUserRole(u.id, e.target.value); setEditingRoleId(null) }}
+                        onBlur={() => setEditingRoleId(null)}
+                      >
+                        {(roleOptionsBySide[u.side] || roleNames).map(r => <option key={r} value={r}>{r}</option>)}
+                      </select>
+                    ) : (
+                      <span className="role-cell">
+                        <span className="badge badge-blue">{u.role}</span>
+                        <button className="role-edit-btn" title="Change role" onClick={() => setEditingRoleId(u.id)}>
+                          <Icon name="edit" size={14} />
+                        </button>
+                      </span>
+                    )}
+                  </td>
                   <td>{u.side}</td>
                   <td>{u.region}</td>
                   <td><span className={'badge ' + (u.status === 'Active' ? 'badge-green' : 'badge-red')}>{u.status}</span></td>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Topbar from '../components/Topbar.jsx'
 import { Icon } from '../components/Icons.jsx'
 import ExportButton from '../components/ExportButton.jsx'
+import DateRange from '../components/DateRange.jsx'
 import { useNav } from '../nav.jsx'
 import {
   tickets, siteById, engineerById,
@@ -81,14 +82,7 @@ export default function Tickets() {
               <button key={v} className={group === v ? 'active' : ''} onClick={() => setGroup(v)}>{l} {n}</button>
             ))}
           </div>
-          <div className="input-wrap" style={{ padding: '7px 12px' }}>
-            <Icon name="calendar" size={16} />
-            <input type="date" aria-label="From" value={from} onChange={e => setFrom(e.target.value)} />
-          </div>
-          <div className="input-wrap" style={{ padding: '7px 12px' }}>
-            <Icon name="calendar" size={16} />
-            <input type="date" aria-label="To" value={to} onChange={e => setTo(e.target.value)} />
-          </div>
+          <DateRange from={from} to={to} onChange={r => { setFrom(r.from); setTo(r.to) }} />
           <button className="btn btn-ghost" onClick={() => { setFrom(''); setTo('') }}>Clear</button>
           <ExportButton rows={rows} filename="tickets.csv" columns={exportColumns} label="Export" />
           <div className="grow" />

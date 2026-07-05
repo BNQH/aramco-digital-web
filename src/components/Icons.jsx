@@ -63,6 +63,9 @@ export const Icon = ({ name, size = 20, ...rest }) => {
     case 'tower': return <svg {...p}><path d="M12 8v13M8 21h8M7 4l10 10M17 4 7 14"/><circle cx="12" cy="6" r="1.4"/></svg>
     case 'sliders': return <svg {...p}><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
     case 'dot': return <svg {...p}><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/></svg>
+    case 'users': return <svg {...p}><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.7-3.2 3.1-4.9 5.5-4.9s4.8 1.7 5.5 4.9"/><path d="M16 5.2a3 3 0 0 1 0 5.7"/><path d="M17.6 20c-.2-1.7-.8-3-1.8-3.9 2 .2 3.7 1.7 4.2 3.9"/></svg>
+    case 'star': return <svg {...p}><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 18.9 6.6 20l1-6.1L3.2 9.5l6.1-.9z"/></svg>
+    case 'edit': return <svg {...p}><path d="M4 20h4l10.5-10.5a2 2 0 0 0 0-2.8l-1.2-1.2a2 2 0 0 0-2.8 0L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
     default: return <svg {...p}><circle cx="12" cy="12" r="9"/></svg>
   }
 }

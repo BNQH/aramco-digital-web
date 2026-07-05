@@ -2,7 +2,7 @@ import Topbar from '../components/Topbar.jsx'
 import MapView from '../components/MapView.jsx'
 import { Icon } from '../components/Icons.jsx'
 import { useNav } from '../nav.jsx'
-import { sites, siteById, siteConditionMeta } from '../data.js'
+import { sites, siteById, siteConditionMeta, hubForSite } from '../data.js'
 
 const KV = ({ k, v }) => (
   <div className="kv"><span className="k">{k}</span><span className="v">{v ?? '—'}</span></div>
@@ -14,6 +14,13 @@ export default function SiteDetails() {
   const cond = siteConditionMeta[s.condition] || { dot: 'gray', badge: 'badge-gray' }
 
   const freq = s.priority === 'P1' ? 'Every 3 months' : s.priority === 'P2' ? 'Every 6 months' : 'Every 12 months'
+
+  // Hub details: for hub sites this resolves to themselves; otherwise to the
+  // region's serving hub. Non-hub sites therefore carry the hub ID + coordinates.
+  const isHub = s.isHub === 'Yes'
+  const hub = hubForSite(s)
+  const hubIdLabel = isHub ? `${s.id} (this site)` : (hub ? hub.id : '—')
+  const hubCoordLabel = hub ? `${hub.coord[0]}, ${hub.coord[1]}` : '—'
 
   return (
     <>
@@ -52,6 +59,8 @@ export default function SiteDetails() {
                 <KV k="Technology" v={s.tech.join(' · ')} />
                 <KV k="Is VIP" v={s.isVip} />
                 <KV k="Is Hub" v={s.isHub} />
+                <KV k="Hub ID" v={hubIdLabel} />
+                <KV k="Hub Coordinates" v={hubCoordLabel} />
                 <KV k="FE Covered Site ID" v={s.feCoveredSiteId} />
                 <KV k="Site Maintainer" v={s.siteMaintainer} />
                 <KV k="Active" v={s.active} />
@@ -93,6 +102,8 @@ export default function SiteDetails() {
               <KV k="Vendor" v={s.vendor} />
               <KV k="Maintainer" v={s.siteMaintainer} />
               <KV k="Covered by site" v={s.feCoveredSiteId} />
+              <KV k="Hub ID" v={hubIdLabel} />
+              <KV k="Hub Coordinates" v={hubCoordLabel} />
               <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
                 <button className="btn btn-primary" style={{ flex: 1 }} onClick={() => navigate('tickets')}><Icon name="plus" size={16} /> New ticket</button>
                 <button className="btn btn-ghost" style={{ flex: 1 }} onClick={() => navigate('map')}><Icon name="map" size={16} /> Map</button>

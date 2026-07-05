@@ -195,6 +195,33 @@ a { color: inherit; text-decoration: none; }
 .input-wrap.on-dark input::placeholder { color: rgba(255,255,255,.7); }
 .input-icon { color: var(--muted-2); display: grid; place-items: center; }
 .input-wrap.on-dark .input-icon { color: rgba(255,255,255,.8); }
+
+/* Single-calendar "from → to" range picker (one trigger, one popup) */
+.date-range { position: relative; display: inline-block; }
+.drp-trigger { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--line-strong); border-radius: 12px; padding: 8px 14px; font-size: 13.5px; font-weight: 600; color: var(--ink); cursor: pointer; transition: .15s; }
+.drp-trigger:hover, .drp-trigger:focus-visible { border-color: var(--green); box-shadow: 0 0 0 3px rgba(27,169,76,.12); outline: none; }
+.drp-trigger .ph { color: var(--muted-2); font-weight: 500; }
+.drp-arrow { color: var(--muted-2); font-weight: 700; }
+.drp-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 1400; background: #fff; border: 1px solid var(--line-strong); border-radius: 16px; box-shadow: var(--shadow-lg); padding: 14px; width: 312px; }
+.drp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.drp-title { font-weight: 800; font-size: 14px; color: var(--navy); }
+.drp-navbtn { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 17px; line-height: 1; color: var(--muted); background: #fff; border: 1px solid var(--line); cursor: pointer; }
+.drp-navbtn:hover { background: var(--bg); color: var(--ink); }
+.drp-dow { display: grid; grid-template-columns: repeat(7, 1fr); margin: 6px 0 2px; }
+.drp-dow span { text-align: center; font-size: 11px; font-weight: 700; color: var(--muted-2); }
+.drp-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 3px; }
+.drp-cell { display: grid; place-items: center; padding: 1px 0; }
+.drp-cell.band { background: var(--info-soft); }
+.drp-cell.band-r { background: linear-gradient(to right, transparent 50%, var(--info-soft) 50%); }
+.drp-cell.band-l { background: linear-gradient(to left, transparent 50%, var(--info-soft) 50%); }
+.drp-day { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 600; color: var(--ink); background: transparent; border: none; cursor: pointer; transition: background .12s; }
+.drp-day:hover { background: var(--bg); }
+.drp-day.dim { color: var(--muted-2); font-weight: 500; }
+.drp-day.today { box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+.drp-day.sel, .drp-day.sel:hover { background: var(--green); color: #fff; font-weight: 700; }
+.drp-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.drp-range-label { font-size: 11.5px; color: var(--muted); }
+.btn-sm { padding: 6px 12px; font-size: 12.5px; border-radius: 9px; }
 .toggle-eye { color: var(--muted-2); display: grid; place-items: center; }
 
 /* ---------- Switch ---------- */
@@ -202,6 +229,12 @@ a { color: inherit; text-decoration: none; }
 .switch.on { background: var(--green); }
 .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: .18s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
 .switch.on::after { left: 21px; }
+
+/* Admin — inline role editing */
+.role-cell { display: inline-flex; align-items: center; gap: 6px; }
+.role-edit-btn { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; color: var(--muted-2); background: transparent; border: 1px solid transparent; transition: .14s; }
+.role-edit-btn:hover { color: var(--info); background: var(--info-soft); border-color: var(--info-soft); }
+.role-select { font-size: 13px; font-weight: 600; color: var(--ink); background: #fff; border: 1px solid var(--green); border-radius: 9px; padding: 6px 10px; outline: none; box-shadow: 0 0 0 3px rgba(27,169,76,.12); cursor: pointer; }
 
 /* ---------- Auth (login / logout) screens ---------- */
 .auth-wrap { min-height: 100vh; display: grid; grid-template-columns: 1.05fr .95fr; }
@@ -341,6 +374,18 @@ a { color: inherit; text-decoration: none; }
 /* Small helpers */
 .metric-row { display: flex; align-items: baseline; gap: 8px; }
 .dim { color: var(--muted-2); font-size: 12px; }
+
+/* Live Map — one container per side combining status summary + roster */
+.map-group { background: #fff; border: 1px solid var(--line-strong); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); padding: 18px 20px; }
+.map-group-fe { border-top: 3px solid var(--info); }
+.map-group-site { border-top: 3px solid var(--green); }
+.map-group .card-head { margin-bottom: 12px; }
+.map-group .card-head h3 { display: inline-flex; align-items: center; gap: 7px; }
+.map-group .card-head h3 svg { color: var(--muted); }
+.map-group-sep { height: 1px; background: var(--line); margin: 16px 0 12px; }
+.map-group-sub { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+.stat-tile { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.hub-badge { position: absolute; top: -5px; right: -5px; width: 15px; height: 15px; border-radius: 50%; background: #F5A623; color: #fff; font-size: 9px; line-height: 1; display: grid; place-items: center; border: 1.5px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 .hairline { height: 1px; background: var(--line); margin: 4px 0; }
 
 /* Brand-tinted sidebar accent */
@@ -359,7 +404,11 @@ a { color: inherit; text-decoration: none; }
 
 /* Emoji map markers */
 .fe-pin span { font-size: 15px; line-height: 1; }
-.site-emoji { width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 2.5px solid var(--green); display: grid; place-items: center; font-size: 15px; box-shadow: 0 2px 6px rgba(0,0,0,.3); }
+.site-emoji { position: relative; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 2.5px solid var(--green); display: grid; place-items: center; font-size: 15px; box-shadow: 0 2px 6px rgba(0,0,0,.3); }
+/* Hub: keep the condition-colored border (green/red/amber…); the golden
+   highlight is an outer glow AROUND it, plus the corner star badge. */
+.site-hub { box-shadow: 0 0 0 3px rgba(232,163,23,.6), 0 0 0 6px rgba(232,163,23,.22), 0 2px 6px rgba(0,0,0,.3); }
+.site-hub-star { position: absolute; top: -7px; right: -7px; width: 15px; height: 15px; border-radius: 50%; background: #F5A623; color: #fff; font-size: 9px; line-height: 1; display: grid; place-items: center; border: 1.5px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.35); }
 
 /* Accordion (engineer report dropdown) */
 .acc { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; overflow: hidden; background: #fff; }

@@ -1,6 +1,6 @@
 import { Icon } from './Icons.jsx'
 import { useNav } from '../nav.jsx'
-import { user } from '../data.js'
+import { session } from '../session.js'
 
 export default function Topbar({ title, sub, showSearch = true, showBack = false }) {
   const { back, navigate } = useNav()
@@ -27,7 +27,7 @@ export default function Topbar({ title, sub, showSearch = true, showBack = false
         <span className="dot" />
       </button>
       <button className="avatar" onClick={() => navigate('profile')} style={{ width: 42, height: 42, fontSize: 16 }} title="Profile">
-        {user.initials}
+        {session.initials}
       </button>
     </header>
   )
